@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "next lint",
-    "start": "server/app.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/express": "^4.17.21",

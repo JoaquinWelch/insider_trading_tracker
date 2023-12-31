@@ -1,10 +1,9 @@
 {
   "name": "insider-trading-tracker",
   "version": "1.0.0",
-  "description": "Seamless Copy-Paste",
+  "description": "",
   "main": "index.js",
-  
-  "author": "Priyansh Patel",
+  "author": "",
   "license": "ISC",
   "workspaces": [
     "server",
