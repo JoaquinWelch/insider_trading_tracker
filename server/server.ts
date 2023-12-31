@@ -1,23 +1,38 @@
-import express, { Request, Response } from 'express';
-import { createServer } from 'http';
-import { parse } from 'url';
+// server.ts
+import express from 'express';
 import next from 'next';
+import fetch from 'node-fetch';
 
 const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
 
-app.prepare().then(() => {
-  const server = express();
+nextApp.prepare().then(() => {
+  const app = express();
+  const PORT = process.env.PORT || 3001;
 
-  server.all('*', (req: Request, res: Response) => {
-    const parsedUrl = parse(req.url!, true);
-    handle(req, res, parsedUrl);
+  // Add your API endpoint URL
+  const apiUrl = 'https://api.sec-api.io/insider-trading';
+
+  app.get('/api/insider-trades', async (req, res) => {
+    try {
+      // Make a request to your API
+      const response = await fetch(apiUrl);
+      const insiderTradesData = await response.json();
+
+      // Send the fetched data to the frontend
+      res.json(insiderTradesData);
+    } catch (error) {
+      console.error('Error fetching insider trades data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   });
 
-  const httpServer = createServer(server);
+  app.get('*', (req, res) => {
+    return handle(req, res);
+  });
 
-  httpServer.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
   });
 });
